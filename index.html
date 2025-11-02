@@ -20,50 +20,62 @@
   img {
     max-width: 80%;
     height: auto;
-    border: 2px solid #333;
   }
   input {
-  font-size: 18px;
-  padding: 5px;
-  border-radius: 8px;
-  border: 2px solid #017FB0;
+    font-size: 18px;
+    padding: 5px;
+    border-radius: 8px;
+    border: 2px solid #017FB0;
   }
 </style>
 </head>
 <body>
-  <img src="https://www.dropbox.com/scl/fi/gfrohokjxd4extkraqz95/welcome-back.png?rlkey=usao0gogdgeippqtz8dvwbexn&e=1&st=vt62ac0b&raw=1" 
-     alt="Welcome Back" width="1000">
+  <h2>vvv Das ist Nachricht Nummer 1 vvv</h2>
   <p id="msg1">Loading...</p>
+  <input type="text" id="newMsg" placeholder="Type new message">
+  <button id="updateBtn">Update Nachricht</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyC1ZYypZ4-fms45zqA_UutYFmbXQ4q3psI",
+  authDomain: "imran-id123.firebaseapp.com",
+  databaseURL: "https://imran-id123-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "imran-id123",
+  storageBucket: "imran-id123.firebasestorage.app",
+  messagingSenderId: "397729453639",
+  appId: "1:397729453639:web:c1e77be6ca3288418d4362",
+  measurementId: "G-EREE36DJSL"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Reference to message
+const msgRef = ref(db, "msg1");
+
+// Listen for changes in Firebase and update HTML
+onValue(msgRef, (snapshot) => {
+  const message = snapshot.val();
+  document.getElementById("msg1").textContent = message || "No message yet";
+});
+
+// Update message on button click
+document.getElementById("updateBtn").addEventListener("click", () => {
+  const newMessage = document.getElementById("newMsg").value;
+  if (newMessage.trim() === "") return;
+
+  set(msgRef, newMessage)
+    .then(() => {
+      document.getElementById("newMsg").value = ""; // clear input
+      console.log("Message updated!");
+    })
+    .catch((error) => console.error(error));
+});
+</script>
 </body>
 </html>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
-const db = getDatabase(app);
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyC1ZYypZ4-fms45zqA_UutYFmbXQ4q3psI",
-    authDomain: "imran-id123.firebaseapp.com",
-    databaseURL: "https://imran-id123-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "imran-id123",
-    storageBucket: "imran-id123.firebasestorage.app",
-    messagingSenderId: "397729453639",
-    appId: "1:397729453639:web:c1e77be6ca3288418d4362",
-    measurementId: "G-EREE36DJSL"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  const msgRef = ref(db, "/msg1");
-  
-  set(msgRef, "update");
-document.getElementById("msg1").textContent = msgRef;
-</script>
