@@ -27,109 +27,14 @@
     border-radius: 8px;
     border: 2px solid #017FB0;
   }
+  botton {
+    color: #2599C7
+  }
 </style>
 </head>
 <body>
-  <h2>vvv Das ist Nachricht Nummer 1 vvv</h2>
-  <p id="msg1">Loading...</p>
-  <input type="text" id="newMsg" placeholder="Schreibe deine Nachricht">
-  <button id="updateBtn">Sende Nachricht (1)</button>
-
-  <h2>vvv Das ist Nachricht Nummer 2 vvv</h2>
-  <p id="msg2">Loading...</p>
-  <input type="text" id="newMsg2" placeholder="Schreibe deine Nachricht">
-  <button id="updateBtn2">Sende Nachricht (2)</button>
-
-  <h2>vvv Das ist Nachricht Nummer 3 vvv</h2>
-  <p id="msg3">Loading...</p>
-  <input type="text" id="newMsg3" placeholder="Schreibe deine Nachricht">
-  <button id="updateBtn3">Sende Nachricht (3)</button>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
-
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyC1ZYypZ4-fms45zqA_UutYFmbXQ4q3psI",
-  authDomain: "imran-id123.firebaseapp.com",
-  databaseURL: "https://imran-id123-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "imran-id123",
-  storageBucket: "imran-id123.firebasestorage.app",
-  messagingSenderId: "397729453639",
-  appId: "1:397729453639:web:c1e77be6ca3288418d4362",
-  measurementId: "G-EREE36DJSL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-// Reference to message
-const msgRef = ref(db, "msg1");
-
-// Listen for changes in Firebase and update HTML
-onValue(msgRef, (snapshot) => {
-  const message = snapshot.val();
-  document.getElementById("msg1").textContent = message || "No message yet";
-});
-
-// Update message on button click
-document.getElementById("updateBtn").addEventListener("click", () => {
-  const newMessage = document.getElementById("newMsg").value;
-  if (newMessage.trim() === "") return;
-
-  set(msgRef, newMessage)
-    .then(() => {
-      document.getElementById("newMsg").value = ""; // clear input
-      console.log("Message updated!");
-    })
-    .catch((error) => console.error(error));
-});
-
-// Reference to message
-const msgRef2 = ref(db, "msg2");
-
-// Listen for changes in Firebase and update HTML
-onValue(msgRef2, (snapshot) => {
-  const message2 = snapshot.val();
-  document.getElementById("msg2").textContent = message2 || "No message yet";
-});
-
-// Update message on button click
-document.getElementById("updateBtn2").addEventListener("click", () => {
-  const newMessage2 = document.getElementById("newMsg2").value;
-  if (newMessage2.trim() === "") return;
-
-  set(msgRef2, newMessage2)
-    .then(() => {
-      document.getElementById("newMsg2").value = ""; // clear input
-      console.log("Message updated!");
-    })
-    .catch((error) => console.error(error));
-});
-
-// Reference to message
-const msgRef3 = ref(db, "msg3");
-
-// Listen for changes in Firebase and update HTML
-onValue(msgRef3, (snapshot) => {
-  const message3 = snapshot.val();
-  document.getElementById("msg3").textContent = message3 || "No message yet";
-});
-
-// Update message on button click
-document.getElementById("updateBtn3").addEventListener("click", () => {
-  const newMessage3 = document.getElementById("newMsg3").value;
-  if (newMessage3.trim() === "") return;
-
-  set(msgRef3, newMessage3)
-    .then(() => {
-      document.getElementById("newMsg3").value = ""; // clear input
-      console.log("Message updated!");
-    })
-    .catch((error) => console.error(error));
-});
+ <script>
+   
 </script>
 </body>
 </html>
