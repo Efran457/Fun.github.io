@@ -42,9 +42,12 @@
 </style>
 </head>
 <body>
-  <button onclick="alert('Willkommen auf meiner Seite!')">Klick mich!</button>
+  <button onclick="OpenSite('https://efran457.github.io')">Spiel Snake</button>
  <script>
-   
+   function OpenSite(site) {
+     window.close();
+     window.open(site, "_self");
+   }
 </script>
 </body>
 </html>
