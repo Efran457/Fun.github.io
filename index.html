@@ -40,6 +40,11 @@
   <input type="text" id="newMsg2" placeholder="Schreibe deine Nachricht">
   <button id="updateBtn2">Sende Nachricht (2)</button>
 
+  <h2>vvv Das ist Nachricht Nummer 3 vvv</h2>
+  <p id="msg2">Loading...</p>
+  <input type="text" id="newMsg3" placeholder="Schreibe deine Nachricht">
+  <button id="updateBtn3">Sende Nachricht (3)</button>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
@@ -99,6 +104,28 @@ document.getElementById("updateBtn2").addEventListener("click", () => {
   set(msgRef2, newMessage2)
     .then(() => {
       document.getElementById("newMsg2").value = ""; // clear input
+      console.log("Message updated!");
+    })
+    .catch((error) => console.error(error));
+});
+
+// Reference to message
+const msgRef3 = ref(db, "msg3");
+
+// Listen for changes in Firebase and update HTML
+onValue(msgRef3, (snapshot) => {
+  const message3 = snapshot.val();
+  document.getElementById("msg3").textContent = message3 || "No message yet";
+});
+
+// Update message on button click
+document.getElementById("updateBtn3").addEventListener("click", () => {
+  const newMessage3 = document.getElementById("newMsg3").value;
+  if (newMessage3.trim() === "") return;
+
+  set(msgRef3, newMessage3)
+    .then(() => {
+      document.getElementById("newMsg3").value = ""; // clear input
       console.log("Message updated!");
     })
     .catch((error) => console.error(error));
