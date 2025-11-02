@@ -39,11 +39,19 @@
   button:hover {
     background-color: #1E7CA0;
   }
+  # buttons {
+    diplay: flex;
+    aling-items: center;
+    gap: 10px;
+  }
 </style>
 </head>
 <body>
   <h1 style=color:white>Wellcomen zur Website!</h1>
-  <button onclick="OpenSite('https://efran457.github.io')">Spiel Snake</button>
+  <div class="button-container">
+    <button onclick="OpenSite('https://efran457.github.io')">Spiel Snake</button>
+    <button onclick="OpenSite('https://efran457.github.io/MainChat')">Öffne den Chat</button>
+  </div>
  <script>
    function OpenSite(site) {
      window.open(site, "_self");
