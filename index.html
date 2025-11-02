@@ -19,6 +19,12 @@
     height: auto;
     border: 2px solid #333;
   }
+  input {
+  font-size: 18px;
+  padding: 5px;
+  border-radius: 8px;
+  border: 2px solid #017FB0;
+  }
 </style>
 </head>
 <body>
@@ -49,4 +55,6 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+
+  const msgRef = ref(db, "/msg1");
 </script>
