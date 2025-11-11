@@ -19,45 +19,49 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    margin-right: 10px;
   }
   button:hover {
     background-color: #1E7CA0;
   }
 
-  #overlay {
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-top: 20px;
   }
 
+  canvas {
+    width: 160px;
+    height: 160px;
+    image-rendering: pixelated;
+    border: 1px solid #333;
+  }
+
   .window {
-    width: 500px;
     background-color: white;
     border: 2px solid #333;
     border-radius: 8px;
     padding: 20px;
-  }
-
-  canvas {
-    image-rendering: pixelated; /* keeps pixels sharp */
-    border: 1px solid #333;
-    margin-top: 10px;
+    width: max-content;
+    margin-top: 20px;
   }
 </style>
 </head>
 <body>
+
 <h1 style="color:white">Wellcomen zur Website!</h1>
 
 <div class="button-container">
   <button onclick="window.location.href='https://efran457.github.io'">Spiel Snake</button>
-  <button onclick="window.location.href='https://efran457.github.io/MainChat'")">Öffne den Chat</button>
+  <button onclick="window.location.href='https://efran457.github.io/MainChat'">Öffne den Chat</button>
   <button onclick="window.location.href='https://efran457.github.io/CreativeMode'">Werde Kreativ</button>
 </div>
 
-<div id="overlay">
-  <div class="window">
-    <h1>Beste Kreativen Bilder</h1>
-    <!-- Canvas to draw your 16x16 pixel image -->
-    <canvas id="pixelCanvas" width="16" height="16" style="width:160px; height:160px;"></canvas>
-  </div>
+<div class="window">
+  <h1>Beste Kreativen Bilder</h1>
+  <div id="gallery" class="gallery"></div>
 </div>
 
 <script type="module">
@@ -79,32 +83,36 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Open links
-function OpenSite(site) {
-  window.open(site, "_self");
-}
+const selectedImages = ["Stift", "67"]; // Hier die Bilder auswählen
+const galleryDiv = document.getElementById("gallery");
 
-// Draw 16x16 pixel image from Firebase
-const canvas = document.getElementById("pixelCanvas");
-const ctx = canvas.getContext("2d");
+// Funktion, um ein Bild zu zeichnen
+async function drawPixelImage(key) {
+  const snapshot = await get(ref(db, `pixelZeichnungen/${key}`));
+  if (!snapshot.exists()) return console.log("No data for", key);
 
-async function drawPixelImage(id) {
-  const snapshot = await get(ref(db, `pixelZeichnungen/${id}`));
-  if (snapshot.exists()) {
-    const pixelData = snapshot.val(); // 16x16 array of hex colors
-    for (let y = 0; y < pixelData.length; y++) {
-      for (let x = 0; x < pixelData[y].length; x++) {
-        ctx.fillStyle = pixelData[y][x];
-        ctx.fillRect(x, y, 1, 1);
-      }
+  const pixelData = snapshot.val();
+  const canvas = document.createElement("canvas");
+  canvas.width = 16;
+  canvas.height = 16;
+  canvas.style.width = "160px";
+  canvas.style.height = "160px";
+  canvas.style.imageRendering = "pixelated";
+  canvas.style.border = "1px solid #333";
+  galleryDiv.appendChild(canvas);
+
+  const ctx = canvas.getContext("2d");
+  for (let y = 0; y < pixelData.length; y++) {
+    for (let x = 0; x < pixelData[y].length; x++) {
+      ctx.fillStyle = pixelData[y][x];
+      ctx.fillRect(x, y, 1, 1);
     }
-  } else {
-    console.log("No data found!");
   }
 }
 
-// Draw image with id 67
-drawPixelImage(67);
+// Alle ausgewählten Bilder laden
+selectedImages.forEach(id => drawPixelImage(id));
 </script>
+
 </body>
 </html>
