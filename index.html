@@ -10,23 +10,7 @@
     margin: 0;
     padding: 20px;
   }
-  p {
-    background-color: #2599C7;
-    font-size: 18px;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-  }
-  img {
-    max-width: 80%;
-    height: auto;
-  }
-  input {
-    font-size: 18px;
-    padding: 5px;
-    border-radius: 8px;
-    border: 2px solid #017FB0;
-  }
+
   button {
     background-color: #2599C7;
     color: white;
@@ -39,27 +23,88 @@
   button:hover {
     background-color: #1E7CA0;
   }
-  # buttons {
-    diplay: flex;
-    aling-items: center;
-    gap: 10px;
+
+  #overlay {
+    margin-top: 20px;
+  }
+
+  .window {
+    width: 500px;
+    background-color: white;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  canvas {
+    image-rendering: pixelated; /* keeps pixels sharp */
+    border: 1px solid #333;
+    margin-top: 10px;
   }
 </style>
 </head>
 <body>
-  <h1 style=color:white>Wellcomen zur Website!</h1>
-  <div class="button-container">
-    <button onclick="OpenSite('https://efran457.github.io')">Spiel Snake</button>
-    <button onclick="OpenSite('https://efran457.github.io/MainChat')">Öffne den Chat</button>
-    <button onclick="window.location.href='https://efran457.github.io/CreativeMode'">
-  Werde Kreativ
-    </button>
-    
+<h1 style="color:white">Wellcomen zur Website!</h1>
+
+<div class="button-container">
+  <button onclick="window.location.href='https://efran457.github.io'">Spiel Snake</button>
+  <button onclick="window.location.href='https://efran457.github.io/MainChat'")">Öffne den Chat</button>
+  <button onclick="window.location.href='https://efran457.github.io/CreativeMode'">Werde Kreativ</button>
+</div>
+
+<div id="overlay">
+  <div class="window">
+    <h1>Beste Kreativen Bilder</h1>
+    <!-- Canvas to draw your 16x16 pixel image -->
+    <canvas id="pixelCanvas" width="16" height="16" style="width:160px; height:160px;"></canvas>
   </div>
- <script>
-   function OpenSite(site) {
-     window.open(site, "_self");
-   }
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+// Firebase-Konfiguration
+const firebaseConfig = {
+  apiKey: "AIzaSyC1ZYypZ4-fms45zqA_UutYFmbXQ4q3psI",
+  authDomain: "imran-id123.firebaseapp.com",
+  databaseURL: "https://imran-id123-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "imran-id123",
+  storageBucket: "imran-id123.firebasestorage.app",
+  messagingSenderId: "397729453639",
+  appId: "1:397729453639:web:c1e77be6ca3288418d4362",
+  measurementId: "G-EREE36DJSL"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// Open links
+function OpenSite(site) {
+  window.open(site, "_self");
+}
+
+// Draw 16x16 pixel image from Firebase
+const canvas = document.getElementById("pixelCanvas");
+const ctx = canvas.getContext("2d");
+
+async function drawPixelImage(id) {
+  const snapshot = await get(ref(db, `pixelZeichnungen/${id}`));
+  if (snapshot.exists()) {
+    const pixelData = snapshot.val(); // 16x16 array of hex colors
+    for (let y = 0; y < pixelData.length; y++) {
+      for (let x = 0; x < pixelData[y].length; x++) {
+        ctx.fillStyle = pixelData[y][x];
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+  } else {
+    console.log("No data found!");
+  }
+}
+
+// Draw image with id 67
+drawPixelImage(67);
 </script>
 </body>
 </html>
